@@ -1,18 +1,18 @@
-CC = gcc
-CFLAGS = -Wall -ansi -pedantic
-MAIN = load_testcase
-OBJS = Lab5.o load_testcase.o
+TARGET   = a.out
+CC       = gcc
+CCFLAGS  = -std=c89 -pedantic -Wall -Werror 
+LDFLAGS  = -lm
+SOURCES  = $(wildcard *.c)
+INCLUDES = $(wildcard *.h)
+OBJECTS  = $(SOURCES:.c=.o)
 
-all : $(MAIN)
+all:$(TARGET)
 
-$(MAIN) : $(OBJS)
-	$(CC) $(CFLAGS) -o $(MAIN) $(OBJS)
+$(TARGET):$(OBJECTS)
+	$(CC) -o $(TARGET) $(LDFLAGS) $(OBJECTS)
 
-Lab5.o : Lab5.c Lab5.h
-	$(CC) $(CFLAGS) -c Lab5.c
-
-load_testcase.o : load_testcase.c mips_asm_header.h
-	$(CC) $(CFLAGS) -c load_testcase.c
+$(OBJECTS):$(SOURCES) $(INCLUDES)
+	$(CC) -c $(CCFLAGS) $(SOURCES)
 
 clean:
-	rm *.o $(MAIN)
+	rm -f $(TARGET) $(OBJECTS)
