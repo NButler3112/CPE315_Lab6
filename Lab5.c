@@ -138,7 +138,7 @@ static void rType(unsigned int instr, unsigned int opcode)
    rt >>= 16;
    rd = instr & 0x0000F800;
    rd >>= 11;
-   shamt = instr & 0x000007A;
+   shamt = instr & 0x000007C0;
    shamt >>= 6;
    funct = instr & 0x0000003F;
 
