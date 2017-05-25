@@ -1,18 +1,12 @@
-TARGET   = a.out
-CC       = gcc
-CCFLAGS  = -std=c89 -pedantic -Wall -Werror 
-LDFLAGS  = -lm
-SOURCES  = $(wildcard *.c)
-INCLUDES = $(wildcard *.h)
-OBJECTS  = $(SOURCES:.c=.o)
+CC = gcc
+CFLAGS = -Wall -std=gnu99 -pedantic
+MAIN = MIPS
+OBJS = mips.o
 
-all:$(TARGET)
+all : $(MAIN)
 
-$(TARGET):$(OBJECTS)
-	$(CC) -o $(TARGET) $(LDFLAGS) $(OBJECTS)
+$(MAIN) : $(OBJS)
+	$(CC) $(CFLAGS) -o $(MAIN) $(OBJS)
 
-$(OBJECTS):$(SOURCES) $(INCLUDES)
-	$(CC) -c $(CCFLAGS) $(SOURCES)
-
-clean:
-	rm -f $(TARGET) $(OBJECTS)
+clean :
+	rm $(MAIN) $(OBJS)
