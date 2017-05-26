@@ -4,7 +4,6 @@
 #include <sys/stat.h>
 
 #include "mips.h"
-#include "lab5.h"
 #include "readline.h"
 
 unsigned int mem[1024];
