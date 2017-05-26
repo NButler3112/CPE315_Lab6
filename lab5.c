@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mips_asm_header.h"
+#include "mips.h"
+#include "lab5.h"
 
 char* regs[] = 
 {
@@ -105,7 +106,7 @@ char* function2[] =
    "Set Less Than Unsigned\0"
 };
 
-static unsigned int findInstruc(unsigned int opcode)
+unsigned int findInstruc(unsigned int opcode)
 {
    if (opcode == 0x00)
    {
@@ -129,20 +130,26 @@ static unsigned int findInstruc(unsigned int opcode)
    }
 }
 
-static void rType(unsigned int instr, unsigned int opcode)
+void rType(unsigned int instr, unsigned int opcode)
 {
    unsigned int rs, rt, rd, shamt, funct;
+   
    rs = instr & 0x03E00000;
    rs >>= 21;
+   
    rt = instr & 0x001F0000;
    rt >>= 16;
+   
    rd = instr & 0x0000F800;
    rd >>= 11;
+   
    shamt = instr & 0x000007C0;
    shamt >>= 6;
+   
    funct = instr & 0x0000003F;
 
    printf("   Register Instruction: ");
+
    if (funct < 0x1F)
    {
       printf("%s (0x00/0x%02X)\n", function0[funct], funct);
@@ -165,7 +172,7 @@ static void rType(unsigned int instr, unsigned int opcode)
    }
 }
 
-static unsigned int branchAddr(unsigned int immed)
+unsigned int branchAddr(unsigned int immed)
 {
    unsigned int brAdd = 0x00000000, immed15 = immed & 0x8000,\
       immedS = immed << 2;
@@ -178,13 +185,13 @@ static unsigned int branchAddr(unsigned int immed)
    return brAdd;
 }
 
-static unsigned int zeroExtImmed(unsigned int immed)
+unsigned int zeroExtImmed(unsigned int immed)
 {
    int ret = 0x00000000 | immed;
    return ret;
 }
 
-static unsigned int signExtImmed(unsigned int immed)
+unsigned int signExtImmed(unsigned int immed)
 {
    int ret = 0x00000000 | immed, immed15 = immed & 0x8000;
    
@@ -195,7 +202,7 @@ static unsigned int signExtImmed(unsigned int immed)
    return ret;
 }
 
-static void iType(unsigned int instr, unsigned int opcode)
+void iType(unsigned int instr, unsigned int opcode)
 {
    char *a = "Immediate:\0", *b = "Branch Address:\0", *s = "Sign Extended Immediate:\0",\
       *z = "Zero Extended Immediate:\0";
@@ -240,7 +247,7 @@ static void iType(unsigned int instr, unsigned int opcode)
 
 }
 
-static void jType(int pc, unsigned int instr, unsigned int opcode)
+void jType(int pc, unsigned int instr, unsigned int opcode)
 {
    unsigned int tempPC, tempWord, word = 0x00000000;
    tempPC = pc & 0xF0000000;
@@ -256,9 +263,12 @@ static void jType(int pc, unsigned int instr, unsigned int opcode)
 void mainDecoder(int i, unsigned int m)
 {
    unsigned int opcode, sOpcode, mask = 0xFC000000;
+   
    opcode = m & mask;
    opcode >>= 26;
+   
    sOpcode = findInstruc(opcode);
+   
    if (sOpcode == -1)
    {
       printf("Invalid Instruction: %08X\n", m);
