@@ -201,7 +201,7 @@ void decode() {
          execute_i(opcode);
          break;
       default:
-         invalid_instruction();
+         /*invalid_instruction();*/
          break;
    }
    
