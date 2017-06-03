@@ -655,6 +655,7 @@ void run_instructions() {
    printf("Running instructions.\n\n");
 
    while (pc != mem_pointer) {
+      printf("PC: 0x%08x\n", pc);
       fetch();
       decode();
    }
@@ -705,7 +706,9 @@ int main (int argc, char * argv[]) {
    fclose(file);
 
    print_instructions();
-   
+
+   pc = mb_hdr.entry;
+
    if (flag == 1) {
       step_instructions();
    } else if (flag == 2) {
